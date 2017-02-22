@@ -4,8 +4,8 @@ default_sell_in = 15
 default_quality = 15
 
 item = Item.new('basic item', default_sell_in, default_quality)
-expired_item = Item.new('expired item', 0, default_quality)
-expired_q1_item = Item.new('expired_q1_item', 0, 1)
+expired_item = Item.new('expired item', -1, default_quality)
+expired_q1_item = Item.new('expired_q1_item', -1, 1)
 q0_item = Item.new('q0_item', default_sell_in, 0)
 brie = Item.new('Aged Brie', default_sell_in, default_quality)
 hq_brie = Item.new('Aged Brie', default_sell_in, 50)
@@ -14,7 +14,7 @@ sulfuras = Item.new('Sulfuras, Hand of Ragnaros', default_sell_in, 80)
 pass = Item.new('Backstage Passes', default_sell_in, default_quality)
 pass_sell_in_8 = Item.new('Backstage Passes', 8, default_quality)
 pass_sell_in_3 = Item.new('Backstage Passes', 3, default_quality)
-expired_pass = Item.new('Backstage Passes', 0, default_quality)
+expired_pass = Item.new('Backstage Passes', -1, default_quality)
 
 conjured = Item.new('Conjured', default_sell_in, default_quality)
 expired_conjured = Item.new('Conjured', -1, default_quality)
@@ -35,7 +35,7 @@ describe "#update_quality" do
     before { update_quality([expired_item]) }
 
     it "reduces the sell_in value by 1 and the quality value by 2" do
-      expect(expired_item).to have_attributes(:sell_in => -1, :quality => default_quality - 2)
+      expect(expired_item).to have_attributes(:sell_in => -2, :quality => default_quality - 2)
     end
   end
 
@@ -47,7 +47,7 @@ describe "#update_quality" do
 
     it "never reduces the quality to a negative value." do
       expect(q0_item).to have_attributes(:sell_in => default_sell_in - 1, :quality => 0)
-      expect(expired_q1_item).to have_attributes(:sell_in => -1, :quality => 0)
+      expect(expired_q1_item).to have_attributes(:sell_in => -2, :quality => 0)
     end
   end
 
@@ -103,7 +103,7 @@ describe "#update_quality" do
     before { update_quality([expired_pass]) }
 
     it "reduces the quality to 0" do
-      expect(expired_pass).to have_attributes(:sell_in => -1, :quality => 0)
+      expect(expired_pass).to have_attributes(:sell_in => -2, :quality => 0)
     end
   end
 
