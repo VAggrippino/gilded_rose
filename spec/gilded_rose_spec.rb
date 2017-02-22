@@ -16,6 +16,12 @@ pass_sell_in_8 = Item.new('Backstage Passes', 8, default_quality)
 pass_sell_in_3 = Item.new('Backstage Passes', 3, default_quality)
 expired_pass = Item.new('Backstage Passes', 0, default_quality);
 
+conjured = Item.new('Conjured', default_sell_in, default_quality)
+expired_conjured = Item.new('Conjured', -1, default_quality)
+conjured_q1 = Item.new('Conjured', default_sell_in, 1)
+expired_conjured_q3 = Item.new('Conjured', -1, 3)
+
+
 describe "#update_quality" do
   context "Given a basic item" do
     before { update_quality([item]) }
@@ -98,6 +104,38 @@ describe "#update_quality" do
 
     it "reduces the quality to 0" do
       expect(expired_pass).to have_attributes(:sell_in => -1, :quality => 0)
+    end
+  end
+
+  context "Given a 'Conjured' item" do
+    before { update_quality([conjured]) }
+
+    it "decreases the quality by 2" do
+      expect(conjured).to have_attributes(:sell_in => default_sell_in - 1, :quality => default_quality - 2)
+    end
+  end
+
+  context "Given a 'Conjured' item with a sell_in < 0" do
+    before { update_quality([expired_conjured]) }
+
+    it "decreases the quality by 4" do
+      expect(expired_conjured).to have_attributes(:sell_in => -2, :quality => default_quality - 4)
+    end
+  end
+
+  context "Given a 'Conjured' item with a quality < 2" do
+    before { update_quality([conjured_q1]) }
+
+    it "reduces the quality to 0" do
+      expect(conjured_q1).to have_attributes(:sell_in => default_sell_in - 1, :quality => 0)
+    end
+  end
+
+  context "Given a 'Conjured' item with a sell_in < 0 and a quality < 4" do
+    before { update_quality([expired_conjured_q3]) }
+
+    it "reduces the quality to 0" do
+      expect(expired_conjured_q3).to have_attributes(:sell_in => -2, :quality => 0)
     end
   end
 
