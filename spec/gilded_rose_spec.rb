@@ -48,7 +48,7 @@ describe "#update_quality" do
     end
   end
 
-  context "Given an item that is due a quality increase, with a quality value of 50" do
+  context "Given a rare item with a quality value of 50" do
     before { update_quality([hq_brie]) }
 
     it "does not increase the quality value" do
