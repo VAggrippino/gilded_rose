@@ -27,31 +27,31 @@ describe "#update_quality" do
   context "Given a basic item" do
     before { update_quality([item]) }
 
-    it "reduces the item's sell_in and quality values" do
+    it "reduces the item's sell_in and quality values." do
       expect(item).to have_attributes(:sell_in => default_sell_in - 1, :quality => default_quality - 1)
     end
   end
 
+  # Basic items
   context "Given an expired basic item" do
     before { update_quality([expired_item]) }
 
-    it "reduces the sell_in value by 1 and the quality value by 2" do
+    it "reduces the sell_in value by 1 and the quality value by 2." do
       expect(expired_item).to have_attributes(:sell_in => -2, :quality => default_quality - 2)
     end
   end
 
   context "Given an item which already has a quality of 0 or 1" do
-    before do
-      update_quality([q0_item])
-      update_quality([expired_q1_item])
-    end
+    items = [q0_item, expired_q1_item]
+    before { update_quality(items) }
 
-    it "never reduces the quality to a negative value." do
+    it "never reduces the quality below 0." do
       expect(q0_item).to have_attributes(:sell_in => default_sell_in - 1, :quality => 0)
       expect(expired_q1_item).to have_attributes(:sell_in => -2, :quality => 0)
     end
   end
 
+  # Aged Brie
   context "Given 'Aged Brie'" do
     before { update_quality([brie]) }
 
@@ -60,14 +60,15 @@ describe "#update_quality" do
     end
   end
 
-  context "Given a rare item with a quality value of 50" do
+  context "Given 'Aged Brie' with a quality of 50" do
     before { update_quality([hq_brie]) }
 
-    it "does not increase the quality value" do
+    it "does not increase the quality beyond 50" do
       expect(hq_brie).to have_attributes(:sell_in => default_sell_in - 1, :quality => 50)
     end
   end
 
+  # Sulfuras
   context "Given 'Sulfuras'" do
     before { update_quality([sulfuras]) }
 
@@ -76,6 +77,7 @@ describe "#update_quality" do
     end
   end
 
+  # Backstage Passes
   context "Given 'Backstage Passes'" do
     before { update_quality([pass]) }
 
@@ -116,6 +118,7 @@ describe "#update_quality" do
     end
   end
 
+  # Conjured
   context "Given a 'Conjured' item" do
     before { update_quality([conjured]) }
 
@@ -147,33 +150,4 @@ describe "#update_quality" do
       expect(expired_conjured_q3).to have_attributes(:sell_in => -2, :quality => 0)
     end
   end
-
-
-  # context "with a single item" do
-  #   let(:initial_sell_in) { 5 }
-  #   let(:initial_quality) { 10 }
-  #   let(:name) { "item" }
-  #   let(:item) { Item.new(name, initial_sell_in, initial_quality) }
-
-  #   before { update_quality([item]) }
-
-  #   it "your specs here" do
-  #     pending
-  #   end
-  # end
-
-  # context "with multiple items" do
-  #   let(:items) {
-  #     [
-  #       Item.new("NORMAL ITEM", 5, 10),
-  #       Item.new("Aged Brie", 3, 10),
-  #     ]
-  #   }
-
-  #   before { update_quality(items) }
-
-  #   it "your specs here" do
-  #     pending
-  #   end
-  # end
 end
