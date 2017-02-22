@@ -14,7 +14,7 @@ sulfuras = Item.new('Sulfuras, Hand of Ragnaros', default_sell_in, 80)
 pass = Item.new('Backstage Passes', default_sell_in, default_quality)
 pass_sell_in_8 = Item.new('Backstage Passes', 8, default_quality)
 pass_sell_in_3 = Item.new('Backstage Passes', 3, default_quality)
-expired_pass = Item.new('Backstage Passes', 0, default_quality);
+expired_pass = Item.new('Backstage Passes', 0, default_quality)
 
 conjured = Item.new('Conjured', default_sell_in, default_quality)
 expired_conjured = Item.new('Conjured', -1, default_quality)
