@@ -14,6 +14,7 @@ sulfuras = Item.new('Sulfuras, Hand of Ragnaros', default_sell_in, 80)
 pass = Item.new('Backstage Passes', default_sell_in, default_quality)
 pass_sell_in_8 = Item.new('Backstage Passes', 8, default_quality)
 pass_sell_in_3 = Item.new('Backstage Passes', 3, default_quality)
+expired_pass = Item.new('Backstage Passes', 0, default_quality);
 
 describe "#update_quality" do
   context "Given a basic item" do
@@ -89,6 +90,14 @@ describe "#update_quality" do
 
     it "increases the quality by 3" do
       expect(pass_sell_in_3).to have_attributes(:sell_in => 2, :quality => default_quality + 3)
+    end
+  end
+
+  context "Given a 'Backstage Passes' with a sell_in <= 0" do
+    before { update_quality([expired_pass]) }
+
+    it "reduces the quality to 0" do
+      expect(expired_pass).to have_attributes(:sell_in => -1, :quality => 0)
     end
   end
 
