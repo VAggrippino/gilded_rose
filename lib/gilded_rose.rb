@@ -57,7 +57,7 @@ def update_quality(items)
           # The item is not brie or a pass, so we reduce the quality for the
           # second time.
           if item.quality > 0
-            # The quality of sulfuras never changes, so we exclude it here.
+            # Decrease the quality value unless the item is sulfuras.
             if item.name != sulfuras
               item.quality -= 1
             end
