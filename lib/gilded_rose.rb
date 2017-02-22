@@ -1,11 +1,12 @@
 def update_quality(items)
   brie = 'Aged Brie'
   sulfuras = 'Sulfuras, Hand of Ragnaros'
-  pass = 'Backstage passes to a TAFKAL80ETC concert'
+  #pass = 'Backstage passes to a TAFKAL80ETC concert'
+  pass = 'backstage passes'
 
   items.each do |item|
     # If the item is not brie or a pass, decrease the quality.
-    if item.name != brie && item.name != pass
+    if item.name != brie && item.name[0..15].downcase != pass
       # Only decrement the quality if it's higher than 0.
       if item.quality > 0
         # Only decrement the quality if it's not a sulfuras.
@@ -22,7 +23,7 @@ def update_quality(items)
 
         # If there are 10 days or less left to sell the pass, increase the
         # quality by 2.
-        if item.name == pass
+        if item.name[0..15].downcase == pass
           if item.sell_in < 11
             if item.quality < 50 # <- Should be <= 48 to accommodate an increase in quality of 2
               item.quality += 1 # <- Should be 2
@@ -52,7 +53,7 @@ def update_quality(items)
 
         # The quality of a pass is decreased to 0 when the sell_in value is
         # below 0, so it is excluded here.
-        if item.name != pass
+        if item.name[0..15].downcase != pass
 
           # The item is not brie or a pass, so we reduce the quality for the
           # second time.
