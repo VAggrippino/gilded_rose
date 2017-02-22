@@ -40,10 +40,9 @@ def update_quality(items)
       end
     end
 
-    # If the item is sulfuras, there's no decrease in quality or (meaningful)
-    # sell_in value.
+    # Decrease the sell_in value unless the item is sulfuras.
     if item.name != sulfuras
-      item.sell_in -= 1 # This shouldn't be here at all.
+      item.sell_in -= 1
     end
 
     # If there are no days left to sell the item, decrease the quality again.
@@ -58,7 +57,7 @@ def update_quality(items)
           # The item is not brie or a pass, so we reduce the quality for the
           # second time.
           if item.quality > 0
-            # The quallity of sulfuras never changes, so we exclude it here.
+            # The quality of sulfuras never changes, so we exclude it here.
             if item.name != sulfuras
               item.quality -= 1
             end
