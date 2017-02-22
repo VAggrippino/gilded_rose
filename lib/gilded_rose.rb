@@ -1,81 +1,62 @@
 def update_quality(items)
-  brie = 'Aged Brie'
-  sulfuras = 'Sulfuras, Hand of Ragnaros'
-  #pass = 'Backstage passes to a TAFKAL80ETC concert'
-  pass = 'backstage passes'
-
   items.each do |item|
-    # If the item is not brie or a pass, decrease the quality.
-    if item.name != brie && item.name[0..15].downcase != pass
-      # Only decrement the quality if it's higher than 0.
-      if item.quality > 0
-        # Only decrement the quality if it's not a sulfuras.
-        if item.name != sulfuras
-          item.quality -= 1
-        end
-      end
+    case item.name
+      # Sulfuras has no sell-by date or decrease in quality... move on.
+    when 'Sulfuras, Hand of Ragnaros'
+      next
 
-    # The item is brie or a pass and the quality increases.
-    else
-      # Only increase the quality if it's below 50.
-      if item.quality < 50
-        item.quality += 1
-
-        # If there are 10 days or less left to sell the pass, increase the
-        # quality by 2.
-        if item.name[0..15].downcase == pass
-          if item.sell_in < 11
-            if item.quality < 50 # <- Should be <= 48 to accommodate an increase in quality of 2
-              item.quality += 1 # <- Should be 2
-            end
-          end
-          # If there are 5 days or less left to sell the pass, increase the
-          # quality by 3
-          if item.sell_in < 6
-            if item.quality < 50 # <- Should be <= 47 to accommodate an increase in quality of 3
-              item.quality += 1 # <- Should be 3
-            end
-          end
-        end
-      end
-    end
-
-    # Decrease the sell_in value unless the item is sulfuras.
-    if item.name != sulfuras
+    # The quality of Aged Brie goes up as it ages.
+    when 'Aged Brie'
       item.sell_in -= 1
-    end
-
-    # If there are no days left to sell the item, decrease the quality again.
-    if item.sell_in < 0
-      # The quality of brie goes up as it ages, so it is excluded here.
-      if item.name != brie
-
-        # The quality of a pass is decreased to 0 when the sell_in value is
-        # below 0, so it is excluded here.
-        if item.name[0..15].downcase != pass
-
-          # The item is not brie or a pass, so we reduce the quality for the
-          # second time.
-          if item.quality > 0
-            # Decrease the quality value unless the item is sulfuras.
-            if item.name != sulfuras
-              item.quality -= 1
-            end
-          end
-
-        # The item is a pass and we reduce the quality to 0.
-        else
-          # This isn't clear. It should just be item.quality = 0.
-          item.quality = item.quality - item.quality
-        end
-
-      # The item is brie. Increase the quality.
-      else
-        # Only increase the quality if it's less than 50.
-        if item.quality < 50
-          item.quality += 1
-        end
+      # The quality of an item can't be raised above 50.
+      unless item.quality == 50
+        item.quality += 1
       end
+
+    # The quality of Backstage Passes goes up as it gets closer to the date
+    # of the concert.
+    when /^backstage passes/i
+      # If the concert has already passed, the quality is set to 0.
+      if item.sell_in < 0
+        item.quality = 0
+
+      # Increase quality by 3 if there are 5 days or less left.
+      elsif item.sell_in <= 5
+        item.quality += 3
+
+      # Increase quality by 2 if there are 10 days or less left.
+      elsif item.sell_in <= 10
+        item.quality += 2
+
+      # There are more than 10 days left, increase the quality by 1.
+      else
+        item.quality += 1
+      end
+
+      if item.quality > 50
+        item.quality = 50
+      end
+
+      item.sell_in -= 1
+
+    # Conjured items degrade twice as fast as normal items
+    when /^conjured/i
+      # Once the sell-by date has passed, quality degrades twice as fast.
+      item.quality -= item.sell_in < 0 ? 4 : 2
+      if item.quality < 0
+        item.quality = 0
+      end
+
+      item.sell_in -= 1
+
+    else
+      # Once the sell-by date has passed, quality degrades twice as fast.
+      item.quality -= item.sell_in < 0 ? 2 : 1
+      if item.quality < 0
+        item.quality = 0
+      end
+
+      item.sell_in -= 1
     end
   end
 end
