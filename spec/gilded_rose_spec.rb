@@ -1,6 +1,7 @@
 require_relative '../lib/gilded_rose'
 
 item = Item.new('basic item', 5, 10)
+expired_item = Item.new('expired item', 0, 10)
 
 describe "#update_quality" do
   context "Given a basic item" do
@@ -8,6 +9,14 @@ describe "#update_quality" do
 
     it "reduces the item's sell_in and quality values" do
       expect(item).to have_attributes(:sell_in => 4, :quality => 9)
+    end
+  end
+
+  context "Given an expired basic item" do
+    before { update_quality([expired_item]) }
+
+    it "reduces the sell_in value by 1 and the quality value by 2" do
+      expect(expired_item).to have_attributes(:sell_in => -1, :quality => 8)
     end
   end
 
