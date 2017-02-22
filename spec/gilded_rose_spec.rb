@@ -8,9 +8,12 @@ expired_item = Item.new('expired item', 0, default_quality)
 expired_q1_item = Item.new('expired_q1_item', 0, 1)
 q0_item = Item.new('q0_item', default_sell_in, 0)
 brie = Item.new('Aged Brie', default_sell_in, default_quality)
-pass = Item.new('Backstage Passes', default_sell_in, default_quality)
 hq_brie = Item.new('Aged Brie', default_sell_in, 50)
 sulfuras = Item.new('Sulfuras, Hand of Ragnaros', default_sell_in, 80)
+
+pass = Item.new('Backstage Passes', default_sell_in, default_quality)
+pass_sell_in_8 = Item.new('Backstage Passes', 8, default_quality)
+pass_sell_in_3 = Item.new('Backstage Passes', 3, default_quality)
 
 describe "#update_quality" do
   context "Given a basic item" do
@@ -65,7 +68,6 @@ describe "#update_quality" do
     end
   end
 
-
   context "Given 'Backstage Passes'" do
     before { update_quality([pass]) }
 
@@ -73,6 +75,15 @@ describe "#update_quality" do
       expect(pass).to have_attributes(:sell_in => default_sell_in - 1, :quality => default_quality + 1)
     end
   end
+
+  context "Given a 'Backstage Passes' with a sell_in <= 10" do
+    before { update_quality([pass_sell_in_8]) }
+
+    it "increases the quality by 2" do
+      expect(pass_sell_in_8).to have_attributes(:sell_in => 7, :quality => default_quality + 2)
+    end
+  end
+
 
   # context "with a single item" do
   #   let(:initial_sell_in) { 5 }
