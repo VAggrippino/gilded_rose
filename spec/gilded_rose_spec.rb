@@ -4,6 +4,8 @@ item = Item.new('basic item', 5, 10)
 expired_item = Item.new('expired item', 0, 10)
 expired_q1_item = Item.new('expired_q1_item', 0, 1)
 q0_item = Item.new('q0_item', 5, 0)
+brie = Item.new('Aged Brie', 5, 10)
+pass = Item.new('Backstage Passes', 5, 10)
 
 describe "#update_quality" do
   context "Given a basic item" do
@@ -33,6 +35,15 @@ describe "#update_quality" do
       expect(q0_item).to have_attributes(:sell_in => 4, :quality => 0)
     end
   end
+
+  context "Given 'Aged Brie'" do
+    before { update_quality([brie]) }
+
+    it "increases the quality of the item" do
+      expect(brie).to have_attributes(:sell_in => 4, :quality => 11)
+    end
+  end
+
 
   # context "with a single item" do
   #   let(:initial_sell_in) { 5 }
