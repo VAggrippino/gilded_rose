@@ -1,5 +1,8 @@
 require_relative '../lib/gilded_rose'
 
+Item = Struct.new(:name, :sell_in, :quality)
+item = Item.new('basic item', 5, 10)
+
 describe "#update_quality" do
 
   context "with a single item" do
