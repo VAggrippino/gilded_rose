@@ -15,6 +15,7 @@ pass = Item.new('Backstage Passes', default_sell_in, default_quality)
 pass_sell_in_8 = Item.new('Backstage Passes', 8, default_quality)
 pass_sell_in_3 = Item.new('Backstage Passes', 3, default_quality)
 expired_pass = Item.new('Backstage Passes', -1, default_quality)
+pass_hq_soon = Item.new('Backstage Passes', 3, 50)
 
 conjured = Item.new('Conjured', default_sell_in, default_quality)
 expired_conjured = Item.new('Conjured', -1, default_quality)
@@ -104,6 +105,14 @@ describe "#update_quality" do
 
     it "reduces the quality to 0" do
       expect(expired_pass).to have_attributes(:sell_in => -2, :quality => 0)
+    end
+  end
+
+  context "Given a 'Backstage Passes' with a low sell_in and high quality" do
+    before { update_quality([pass_hq_soon]) }
+
+    it "only increases the quality to 50" do
+      expect(pass_hq_soon).to have_attributes(:sell_in => 2, :quality => 50)
     end
   end
 
