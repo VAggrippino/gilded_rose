@@ -84,6 +84,14 @@ describe "#update_quality" do
     end
   end
 
+  context "Given a 'Backstage Passes' with a sell_in <= 5" do
+    before { update_quality([pass_sell_in_3]) }
+
+    it "increases the quality by 3" do
+      expect(pass_sell_in_3).to have_attributes(:sell_in => 2, :quality => default_quality + 3)
+    end
+  end
+
 
   # context "with a single item" do
   #   let(:initial_sell_in) { 5 }
