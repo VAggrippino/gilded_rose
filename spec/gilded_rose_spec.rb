@@ -10,6 +10,7 @@ q0_item = Item.new('q0_item', default_sell_in, 0)
 brie = Item.new('Aged Brie', default_sell_in, default_quality)
 pass = Item.new('Backstage Passes', default_sell_in, default_quality)
 hq_brie = Item.new('Aged Brie', default_sell_in, 50)
+sulfuras = Item.new('Sulfuras, Hand of Ragnaros', default_sell_in, 80)
 
 describe "#update_quality" do
   context "Given a basic item" do
@@ -55,6 +56,15 @@ describe "#update_quality" do
       expect(hq_brie).to have_attributes(:sell_in => default_sell_in - 1, :quality => 50)
     end
   end
+
+  context "Given 'Sulfuras'" do
+    before { update_quality([sulfuras]) }
+
+    it "ignores the sell_in and quality values" do
+      expect(sulfuras).to have_attributes(:sell_in => default_sell_in, :quality => 80)
+    end
+  end
+
 
   context "Given 'Backstage Passes'" do
     before { update_quality([pass]) }
