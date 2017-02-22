@@ -45,8 +45,7 @@ def update_quality(items)
       item.sell_in -= 1 # This shouldn't be here at all.
     end
 
-    # If there are no days left to sell the item, decrease the quality twice as
-    # fast.
+    # If there are no days left to sell the item, decrease the quality again.
     if item.sell_in < 0
       # The quality of brie goes up as it ages, so it is excluded here.
       if item.name != brie
@@ -55,14 +54,12 @@ def update_quality(items)
         # below 0, so it is excluded here.
         if item.name != pass
 
-          # The item is not brie or a pass, so we reduce the quality twice as
-          # fast.
+          # The item is not brie or a pass, so we reduce the quality for the
+          # second time.
           if item.quality > 0
             # The quallity of sulfuras never changes, so we exclude it here.
             if item.name != sulfuras
-              # There should be a check here for the current quality value
-              # because quality is never less than 0.
-              item.quality -= 1 # This should be 2.
+              item.quality -= 1
             end
           end
 
